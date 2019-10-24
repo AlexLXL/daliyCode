@@ -1,0 +1,75 @@
+//转中文一二三
+Vue.filter('formatZh', (value)=>{
+    const z = '零一二三四五六七八九十';
+    // let arr = value.split('');
+    function to(s) {
+        if (s >= 10) {
+            let _s = s;
+            s = s.split('').join('十');
+            if (_s < 20) {
+                s = s.substr(1)
+            }
+        }
+        return s.replace(/\d/g, (i, j) => ((j == 0 && i == 0) || (s.length - 1 === j && i == 0) ? '' : z[i]))
+    }
+    return to(value)
+})
+
+
+去空格、转数组、转字符串trim()去两边空格
+.replace(/\s*/g,"").split('。').reduce(function(add,item,index){if(item){add.push(++index + '.' + item)};return add},[]).join('\n')
+
+string.trim()去掉前后空格
+
+
+
+self.appUserInfo.info.factory.id;
+this.department1 = this.appUserInfo.info.factoryUserDefault.department1// 部门
+this.loginName = this.appUserInfo.info.loginUser.name;// 用户名(和登录名不同)
+
+@keyup.enter.native="search"
+
+
+remoteMethod(query) {
+            console.log(query)
+            if (query !== '') {
+                this.loadingSearch = true;
+                appSpareManagementController.getDeviceDisPlayName({displayName:query},function (result) {
+                    self.options4 = result.data;
+                    self.loadingSearch = false;
+                })
+            } else {
+                this.options4 = [];
+            }
+            this.addSpareLabel.forEach((item) => {
+                if(item.label == '申请用途'){
+                    item.value = this.value9;
+                    console.log(1111)
+                    console.log(this.value9)
+                }
+            })
+        },
+
+
+---设置html，body的宽高1920*1080
+---index.html加下面代码
+---文字大小px就好---会缩放
+大屏的等比宽高缩放(原型1920*1080)(压缩文字)
+<script>
+      var bodyNode = document.getElementsByTagName('body')[0];
+      var ratioW = window.innerWidth / 1920;
+      var ratioH = window.innerHeight / 1080;
+      bodyNode.style.transform = "scale(" + ratioW + "," + ratioH + ")";
+      bodyNode.style.transformOrigin = "left top";
+  </script>
+
+
+
+大屏的按高等比缩放(原型1920*1080)(不会压缩文字，但会屏幕宽度太小，高度太大，会看不到两边)
+<script>
+      var bodyNode = document.getElementsByTagName('body')[0];
+      var ratioH = window.innerHeight / 768;
+      bodyNode.style.transform = "scale(" + ratioH + ")";
+      bodyNode.style.transformOrigin = "left top";
+      bodyNode.style.marginLeft = (window.innerWidth - bodyNode.clientWidth * ratioH) / 2 + "px";
+  </script>
