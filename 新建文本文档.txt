@@ -1,3 +1,19 @@
+如果最后一个是$字符串，去除最后的$(放置str.split('$')时生成空字符串，如str='123$',str.split('$') -> ['123',''])
+if(str.charAt(str.length-1) == '$'){str = str.slice(0,-1)}
+
+判断是否数字
+if(isNaN(this.lastMonthStockValue)){
+                self.$message({
+                    type: 'warning',
+                    message: "请输入正确的数值！"
+                })
+            }else{
+                this.lastMonthStock = this.lastMonthStockValue;
+                this.innerVisible = false;
+            }
+
+
+
 //转中文一二三
 Vue.filter('formatZh', (value)=>{
     const z = '零一二三四五六七八九十';
@@ -16,12 +32,24 @@ Vue.filter('formatZh', (value)=>{
 })
 
 
-去空格、转数组、转字符串trim()去两边空格
+去空格、转数组、转字符串trim()去两边空格  split字符串按字符转数组   join数组转字符串(可以用来展示数组的时候逗号隔开)
 .replace(/\s*/g,"").split('。').reduce(function(add,item,index){if(item){add.push(++index + '.' + item)};return add},[]).join('\n')
 
 string.trim()去掉前后空格
 
-
+<!--elementui  fixed固定列-->
+                <el-table-column type="selection" fixed></el-table-column>
+                <el-table-column label="操作" fixed width="90">
+                    <template scope="scope">
+                        <i class="el-icon-edit" v-if="scope.row.stateText" @click="editItem(scope.row)"></i>&nbsp;&nbsp;&nbsp;
+                        <i class="el-icon-information" v-if="scope.row.stateText"
+                           @click="getDateFormDetails(scope.row)"></i>
+                    </template>
+                </el-table-column>
+                <el-table-column label="日期" fixed width="120" prop="date">
+                </el-table-column>
+                <el-table-column label="报表状态" fixed width="90" prop="stateText">
+                </el-table-column>
 
 self.appUserInfo.info.factory.id;
 this.department1 = this.appUserInfo.info.factoryUserDefault.department1// 部门
@@ -73,3 +101,115 @@ remoteMethod(query) {
       bodyNode.style.transformOrigin = "left top";
       bodyNode.style.marginLeft = (window.innerWidth - bodyNode.clientWidth * ratioH) / 2 + "px";
   </script>
+
+
+
+elementUI自定义合并行:
+
+加上属性show-summary
+        :summary-method="getSummaries"
+
+方法: getSummaries(param) { //自定义合计行
+            const { columns, data } = param;
+            let sums =  columns.reduce((add,col,index) => {
+                let sum = 0;
+                data.forEach((sub) => {
+                    sum += sub[col.property];
+                });
+                //处理某列的计算方式
+                if(col.label == '含水量(%)'){
+                    sum = (sum / data.length).toFixed(2)
+                }
+                //处理非数字，push结果
+                if(isNaN(sum)){
+                    index == 0?add.push('合计'):add.push('')
+                }else{
+                    add.push(sum);
+                }
+                return add
+            },[]);
+
+            return sums
+        },
+
+
+
+---------------
+elementui  table编辑(可山下移动，input上下选中，新增一行需要设置当前行高亮this.$refs.eltableCurrentRow.setCurrentRow();)
+
+highlight-current-row
+@cell-click="handleClick"
+
+ <el-table-column
+                prop="proWater"
+                align="center"
+                width="200"
+                label="污泥产生量(吨)">
+                <template scope="scope">
+                    <el-input v-if="scope.row.date <= today" :disabled="scope.row.default == 0" v-model="scope.row.proWater" :autofocus="true" @keydown.up.native="moveUp(scope.row,$event,'up')" @keydown.down.native="moveUp(scope.row,$event,'down')"></el-input>
+                    <span v-if="scope.row.date > today">{{scope.row.proWater}}</span>
+                </template>
+            </el-table-column>
+// 新增删除一行
+delOrderNum(index,row){
+            this.tableData3.splice(index, 1);
+            this.$refs.eltableCurrentRow.setCurrentRow();
+        },
+        addOrderNum(index, row){
+            let addDate = this.tableData3[index].date;
+            let addIndex;
+            this.tableData3.forEach((item,index) => {
+                if(item.date == addDate){
+                    addIndex = index + 1;
+                }
+            });
+            this.tableData3.splice(addIndex, 0, {
+                "date": row.date,
+                "proWater": '',
+                "waterRate": '',
+                "devlier": '',
+                "list": "",
+                "goto": "",
+                default:0,
+                "id": 0
+            });
+            this.$refs.eltableCurrentRow.setCurrentRow();
+        },
+//鼠标上下移动
+moveUp(row,e,type){
+            e = e || window.event || arguments.callee.caller.arguments[0];
+            e.preventDefault();
+            e.target.blur();
+            // 第一层if判断上下
+            // 第二层if判断是否到顶部/是否到底部(即明天)
+            // 第三层if判断是否遇到disabled, 默认跳转第4个input
+            if(type == 'up'){
+                if(e.target.parentNode.parentNode.parentNode.parentNode.previousSibling){
+                    if(e.target.parentNode.parentNode.parentNode.parentNode.previousSibling.children[e.target.parentNode.parentNode.parentNode.cellIndex].children[0].children[0].children[0].getAttribute('disabled') == 'disabled'){
+                        e.target.parentNode.parentNode.parentNode.parentNode.previousSibling.children[4].children[0].children[0].children[0].focus()
+                    }else{
+                        e.target.parentNode.parentNode.parentNode.parentNode.previousSibling.children[e.target.parentNode.parentNode.parentNode.cellIndex].children[0].children[0].children[0].focus()
+                    }
+                    this.$refs.eltableCurrentRow.setCurrentRow(self.tableData3[self.tableData3.indexOf(row)-1]);// 切换当前行
+                }else{
+                    e.target.focus();
+                }
+            }else{
+                if(e.target.parentNode.parentNode.parentNode.parentNode.nextSibling.children[e.target.parentNode.parentNode.parentNode.cellIndex].children[0].children[0].children[0]){
+                    if(e.target.parentNode.parentNode.parentNode.parentNode.nextSibling.children[e.target.parentNode.parentNode.parentNode.cellIndex].children[0].children[0].children[0].getAttribute('disabled') == 'disabled'){
+                        e.target.parentNode.parentNode.parentNode.parentNode.nextSibling.children[4].children[0].children[0].children[0].focus()
+                    }else{
+                        e.target.parentNode.parentNode.parentNode.parentNode.nextSibling.children[e.target.parentNode.parentNode.parentNode.cellIndex].children[0].children[0].children[0].focus()
+                    }
+                    this.$refs.eltableCurrentRow.setCurrentRow(self.tableData3[self.tableData3.indexOf(row)+1]);
+                }else{
+                    e.target.focus();
+                }
+
+            }
+        },
+        handleClick(row, column, cell, event){
+            this.$refs.eltableCurrentRow.setCurrentRow();
+            this.$refs.eltableCurrentRow.setCurrentRow(row);
+        },
+
