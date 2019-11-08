@@ -599,18 +599,55 @@ option = {
 //-------------------------------------------------
 
 //tooltip显示类目所有选项，并把选中区域显示为shadow/line
-tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-        type : 'shadow',
-        crossStyle: {
-            color: '#999'
+var option = {
+    tooltip: {// 提示
+        trigger: 'axis',
+        axisPointer: {
+            type : 'shadow',
+            crossStyle: {
+                color: '#999'
+            }
+        },
+        formatter : function(params, ticket, callback) {
+            if (params.value == undefined || params.value !== params.value) {
+                params.value = 0;
+            }
+            return  params.seriesName +" <br />" + params.name + ":" + params.value + "%";        
         }
-    }
-},
+    },
+    legend: {// 类目显示
+        icon: 'roundRect',
+        orient: 'vertical',
+        selectedMode: 'single',
+        top: 'center',
+        itemGap: 10,
+        right: 0,
+        textStyle: {
+            color: '#fff',
+            fontWeight: 'bold',
+            fontSize: 16,
+        },
+        data: ['COD', 'BOD', 'NH3N', 'SS', 'TP']
+    },
+    series: [
+        {
+            barWidth: 20,
+            data:  ["47", "59", "95", "74",],
+            name: "总量",
+            type: "bar",
+        },
+        {
+            barGap: "-100%", // 柱状图重贴但不互相叠加
+            barWidth: 20,
+            data: ["27", "24", "43", "10", ],
+            name: "分量",
+            type: "bar"
+        }
+    ]
+}
 
 
-
+// 柱状图重贴但不互相叠加 --- https://www.cnblogs.com/sllzhj/p/10711644.html
 
 
 
