@@ -1,6 +1,9 @@
 如果最后一个是$字符串，去除最后的$(放置str.split('$')时生成空字符串，如str='123$',str.split('$') -> ['123',''])
 if(str.charAt(str.length-1) == '$'){str = str.slice(0,-1)}
 
+判断为null
+!tmp && typeof(tmp)!="undefined" && tmp!=0
+
 判断是否数字
 if(isNaN(this.lastMonthStockValue)){
                 self.$message({
@@ -11,9 +14,35 @@ if(isNaN(this.lastMonthStockValue)){
                 this.lastMonthStock = this.lastMonthStockValue;
                 this.innerVisible = false;
             }
+--------------------
+// 定时更新日期和气温
+        setInterval(() => {
+            this.getGdWeatherInfoNow();
+        }, 60 * 60 * 1000);
+        // 0点的时候更新一次
+        setTimeout(() => {
+            this.getGdWeatherInfoNow();
+        }, +new Date(Date.now() + 24*60*60*1000) - Date.now())
+---------------------
+Object.keys(b).length    判断是否空对象
+---------------------
+moment使用
+2019年开始和结束那天
+console.log(moment("2019").startOf('year').format('YYYY-MM-DD HH:mm:ss'))       -----2019-01-01 00:00:00
+        console.log(moment("2019").endOf('year').format('YYYY-MM-DD HH:mm:ss'))     ----2019-12-31 23:59:59
 
+        console.log(moment(self.yearSelected + '-' +  self.monthsSelectedStart).startOf('month').format('YYYY-MM-DD HH:mm:ss'));
+        console.log(moment(self.yearSelected + '-' +  self.monthsSelectedEnd).endOf('month').format('YYYY-MM-DD HH:mm:ss'));
+        console.log(this.dateRange[0]?moment(this.dateRange[0]).format('YYYY-MM-DD HH:mm:ss'):'',)
+        console.log(this.dateRange[1]?moment(this.dateRange[1]).format('YYYY-MM-DD 23:59:59'):'',)
+created
+self.dateRange = [moment().startOf('month').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')];
 
-
+------------------
+[1,2,3,4,5].fill(0)
+(5)    -------->     ?[0, 0, 0, 0, 0]
+[0,0,0,0,0,0,0,0,0,0,0].fill(1,1,3)    -------->     (11) [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+------------------
 //转中文一二三
 Vue.filter('formatZh', (value)=>{
     const z = '零一二三四五六七八九十';
@@ -102,8 +131,31 @@ remoteMethod(query) {
       bodyNode.style.marginLeft = (window.innerWidth - bodyNode.clientWidth * ratioH) / 2 + "px";
   </script>
 
+-----------------------------------
+promise代码
+self.maintainPromise1= new Promise(function(resolve,reject){
+                let maintainParam = {
+
+                };
+                appBusinessStatisticsController.getMaintainplanItemCount(maintainParam,(result) => {
+                    resolve()
+                });
+            };
+
+            self.maintainPromise2= new Promise(function(resolve,reject){
+                let deviceParam = {
+
+                };
+                appBusinessStatisticsController.getDeviceCount(deviceParam,(result) => {
+                    resolve()
+                });
+            };
+            Promise.all([self.maintainPromise1, self.maintainPromise2]).then(function([ResultJson1,ResultJson2]){
+                
+            });
 
 
+-------------------------------------------
 elementUI自定义合并行:
 
 加上属性show-summary
@@ -213,3 +265,145 @@ moveUp(row,e,type){
             this.$refs.eltableCurrentRow.setCurrentRow(row);
         },
 
+-------------------
+
+选择月的范围
+
+HTML：
+<span   v-show="yTD == '月报'">
+                <el-select v-model="yearSelected" style="width:90px;" placeholder="年份"
+                           @change="yearSelectedChange">
+                <el-option
+                    v-for="item in years"
+                    :key="item"
+                    :label="item"
+                    :value="item">
+                </el-option>
+            </el-select>
+            年
+            <el-select v-model="monthsSelectedStart" style="width:80px;" placeholder="开始" @change="monthStartChange">
+                <el-option
+                    v-for="item in startMonths"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                </el-option>
+            </el-select>
+            至
+            <el-select v-model="monthsSelectedEnd" style="width:80px;" placeholder="结束" @change="monthEndChange">
+                <el-option
+                    v-for="item in endMonths"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                </el-option>
+            </el-select>
+            </span>
+
+JS：
+years: [],//年份selector
+            months: [],
+            startMonths: [],
+            monthsSelectedStart: '',
+            monthsSelectedEnd: '',
+            yearSelected: moment().format("YYYY"),
+
+
+created: function () {
+        var nowYear = new Date().getFullYear();
+        this.years = [];
+        if (nowYear <= 2018) {
+            this.years = [2018];
+            return;
+        }
+        for (let i = 2018; i <= nowYear; i++) {
+            this.years.push(i)
+        }
+        this.monthsSelectedStart = +moment().format('M');
+        this.monthsSelectedEnd = +moment().format('M');
+    },
+
+methods:{
+        //选择年份后执行的函数
+        yearSelectedChange() {
+            this.setMonthList();
+        },
+        //动态设置开始月份数据和结束月份数组
+        setMonthList() {
+            var now = new Date();
+            this.months = [];
+            this.startMonths = [];
+            if (this.yearSelected == now.getFullYear()) {
+                var nowMonth = now.getMonth() + 2;
+                for (let i = 1; i <= nowMonth; i++) {
+                    let item = {
+                        label: i + '月',
+                        value: i
+                    };
+                    this.months.push(item);
+                    if (i < nowMonth) {
+                        this.startMonths.push(item);
+                    }
+                }
+                if (this.monthsSelectedStart > (nowMonth - 1)) {
+                    this.monthsSelectedStart = nowMonth - 1;
+                }
+                if (this.monthsSelectedEnd > nowMonth) {
+                    this.monthsSelectedEnd = nowMonth;
+                }
+            } else {
+                for (let j = 1; j <= 12; j++) {
+                    let item1 = {
+                        label: j + '月',
+                        value: j
+                    };
+                    this.months.push(item1);
+                }
+                this.startMonths = this.months.concat();
+            }
+            this.endMonths = this.startMonths.concat();
+        },
+        //选择月份
+        monthStartChange() {
+            if (this.monthsSelectedStart == 12) {
+                this.monthsSelectedEnd = 12;
+            } else if (this.monthsSelectedStart > this.monthsSelectedEnd) {
+                this.monthsSelectedEnd = this.endMonths[0].value;
+            } else {
+            }
+        },
+        monthEndChange() {
+            if (this.monthsSelectedStart > this.monthsSelectedEnd) {
+                this.$message({
+                    message: '开始月份或结束月份错误!!',
+                    type: 'error'
+                });
+            } else {
+
+            }
+        },
+        changeMonthReport(){
+            if(this.yTD == '月报'){
+                this.yearSelectedChange();
+            }
+        },
+}
+
+computed:{
+endMonths() {
+            let months = this.months;
+            let self = this;
+            let arr = months.filter((item) => {
+                if(this.yearSelected != new Date().getFullYear()){
+                    return (item.value >= self.monthsSelectedStart);
+                }else{
+                    return (item.value >= self.monthsSelectedStart) && (item.value <= +moment().format('M'));
+                }
+            });
+            return arr;
+        },
+}
+
+mounted:{
+	this.changeMonthReport()
+}
