@@ -322,8 +322,6 @@ option = {
     }]
 };
 
-// -----------------------------------
-
 //有中间线markLine的折线图(两条线))
 item.echartOption = {
     tooltip:{
@@ -413,7 +411,7 @@ item.echartOption = {
                 }
             },
             markLine: {
-                silent:false,
+                silent:false,//是否响应鼠标事件
                 symbol: "none", //去掉警戒线最后面的箭头
                 data: [{
                     name:'平均值',
@@ -435,10 +433,6 @@ item.echartOption = {
             }
         },]
 };
-
-
-//-------------------------------------------
-
 //折线图(多条线))
 option = {
     xAxis: {
@@ -476,7 +470,7 @@ option = {
     legend:{
         icon:'roundRect',
         orient:'vertical',
-        selectedMode:'single',
+        selectedMode:'single', //多条折现只显示一条
         top:'center',
         itemGap:30,
         right:0,
@@ -596,14 +590,208 @@ option = {
     }]
 };
 
+//仪表盘的圈
+var option = {
+    graphic:{
+        type:"text",
+        left:"center",
+        top:"40%",
+        style:{
+            text:"km",
+            textAlign:"center",
+            fill:"#fff",
+            fontSize:20,
+            fontWeight:700
+        },
+    },
+    series: [
+        {
+            name: '1',
+            type: 'gauge',
+            center: ['50%', '55%'], // 默认全局居中
+            radius: '100%',
+            min: 0,
+            max: 400,
+            splitNumber: 10,
+            axisLine: { // 坐标轴线
+                lineStyle: { // 属性lineStyle控制线条样式
+                    color: [
+                        [100 / 400, '#4F8BBF'],//根据实际数据动态改变
+                        [1, '#DCDDDD'],
+
+                    ],
+                    width: 20, //半径
+                    shadowColor: '#fff', //默认透明
+                    shadowBlur: 1
+                }
+            },
+            pointer: {
+                show:false
+            },
+            axisLabel: {
+                //show:false,
+                // 坐标轴小标记
+                textStyle: { // 属性lineStyle控制线条样式
+                    fontWeight: 'bolder',
+                    color: 'transparent', //刻度数字颜色 隐藏
+                    shadowColor: '#fff', //默认透明
+                    shadowBlur: 10
+                }
+            },
+            axisTick: { // 坐标轴小标记
+                length: 12, // 属性length控制线长
+                lineStyle: { // 属性lineStyle控制线条样式
+                    color: 'transparent', //坐标轴 小刻度线颜色
+                    shadowColor: '#fff', //默认透明
+                    shadowBlur: 10
+                }
+            },
+            splitLine: { // 分隔线
+                length: 20, // 属性length控制线长
+                lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+                    width: 3,
+                    color: 'transparent', //分割线
+                    shadowColor: '#fff', //默认透明
+                    shadowBlur: 10
+                }
+            },
+            title: {
+                offsetCenter:[0,0],
+                textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                    fontWeight: 'bolder',
+                    fontSize: 25,
+                    color: '#fff',
+                    shadowColor: '#fff', //默认透明
+                    shadowBlur: 10
+                }
+            },
+            detail: { //show : true ,
+                offsetCenter:[0,"70%"],
+                borderColor: '#fff',
+                shadowColor: '#fff', //默认透明
+                textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                    fontWeight: 'bolder',
+                    fontSize: 20,
+                    color: '#fff'
+                },
+                formatter: '{value}条'
+            },
+            data: [
+                data1
+            ]
+        }
+
+    ]
+
+}
+
 //-------------------------------------------------
 
 //tooltip显示类目所有选项，并把选中区域显示为shadow/line
 var option = {
-    tooltip: {// 提示
+    title:[ //添加文字
+        {
+            text:"80%",
+            left:"center",
+            top:"50%",
+            textStyle:{
+                color:"#27D9C8",
+                fontSize:36,
+                align:"center"
+            }
+        }
+    ],
+    graphic:{ //添加文字2
+        type:"text",
+        left:"center",
+        top:"40%",
+        style:{
+            text:"运动达标率",
+            textAlign:"center",
+            fill:"#333",
+            fontSize:20,
+            fontWeight:700
+        }
+    },
+    xAxis: [{
+        name:'投标人',  //x轴单位
+        gridIndex: 0,
+        type: "category",
+        data: xdata,
+        max : 200,
+        min : 0,
+        splitNumber: 5,//x轴分隔段数(会自动调整) //配合max和min设置   max/splitNumber=间隔值
+        axisLine: { // x轴
+            lineStyle:{
+                color:'#272729',//x轴的颜色
+                width:8,//轴线的宽度
+            }
+        },
+        axisTick: { //影藏刻度线
+            show: false
+        },
+        axisLabel: {
+            show: true,
+            textStyle: {
+                color: '#fff'   //坐标值的颜色
+            },
+            interval:0,  //强制显示所有标签 方案I
+            margin: 10,
+
+            rotate:"45",  //旋转    方案II
+
+            formatter: function(value){  //方案III 垂直显示
+                return value.split("").join("\n");  
+            },
+            formatter: function(params,index){  //方案III 间隔一个换行
+                if (index % 2 != 0) {
+                    return '\n\n' + params;
+                }
+                else {
+                    return params;
+                }  
+            },
+        },
+        axisPointer: {
+            type: 'shadow'//显示类目里面的所有子类
+        },
+        splitLine:{//设置网格
+            show:false,//去除网格线
+            lineStyle:{
+                color:['#0087ED'],//网格线颜色
+                width: 1,
+                type: 'solid'
+            }
+        },
+        splitArea : {show : true}//保留网格区域
+    }],
+    yAxis: [
+        {
+            name: '时长（min）',    //y轴单位
+            axisLine: {
+                lineStyle:{
+                    color:'#272729',// y轴的颜色
+                    width:8,//y轴线的宽度
+                }
+            },
+        }
+    ],
+    grid:{//调整图标大小
+        // x:25,
+        // y:45,
+        // x2:5,
+        // y2:20,
+        top:"20px",
+        bottom:"20%",
+        left:"20%",//grid 组件离容器左侧的距离。
+        right:"30px",
+        borderColor:"#c45455",//网格的边框颜色
+        borderWidth:1
+    },
+    tooltip: {// 鼠标移入提示
         trigger: 'axis',
         axisPointer: {
-            type : 'shadow',
+            type : 'cross',// cross显示x轴的一条线
             crossStyle: {
                 color: '#999'
             }
@@ -616,9 +804,9 @@ var option = {
         }
     },
     legend: {// 类目显示
-        icon: 'roundRect',
+        icon: 'roundRect',//设置标记类型('circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none')
         orient: 'vertical',
-        selectedMode: 'single',
+        selectedMode:'single', //多条折现只显示一条
         top: 'center',
         itemGap: 10,
         right: 0,
@@ -629,25 +817,133 @@ var option = {
         },
         data: ['COD', 'BOD', 'NH3N', 'SS', 'TP']
     },
+    toolbox: {
+        feature: {
+            dataView: {show: true, readOnly: false},//数据视图-看一行行的数字
+            magicType: {show: true, type: ['line', 'bar']},//图形类型转换
+            restore: {show: true},//重置
+            saveAsImage: {show: true}//下载保存为图片
+        }
+    },
     series: [
+        {
+            name: "温度",//鼠标放在折线点上显示的名称
+            type: "line",//折线图
+            symbol: 'circle',//折线点设置为实心点  (symbol: 'none',  //取消折点圆圈)
+            symbolSize: 4,   //折线点的大小
+            itemStyle: {
+               normal: {
+                 color: "#386db3",//折线点的颜色
+                 lineStyle: {
+                 color: "#386db3"//折线的颜色
+                }
+              }
+            },
+            // 折线上的数字
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top',
+                    formatter:'{c}%'
+                }
+            },
+            // 折线颜色
+            itemStyle: {
+                normal: {
+                    color: '#33CCFF',
+                    lineStyle: {
+                        color: '#33CCFF'
+                    }
+                }
+            },
+        },
         {
             barWidth: 20,
             data:  ["47", "59", "95", "74",],
             name: "总量",
             type: "bar",
+            markPoint : {//显示最高点和最低点
+                data : [//显示值-在x轴第几个-y轴什么高度显示
+                    {name : '年最高', value : 182.2, xAxis: 7, yAxis: 183},
+                    {name : '年最低', value : 2.3, xAxis: 11, yAxis: 3}
+                ]
+            },
         },
         {
             barGap: "-100%", // 柱状图重贴但不互相叠加
             barWidth: 20,
             data: ["27", "24", "43", "10", ],
             name: "分量",
-            type: "bar"
+            type: "bar",
+            itemStyle: {
+                normal: {
+                    //柱形图圆角，初始化效果,左上-右上-右下-左下
+                    barBorderRadius:[10, 10, 10, 10],
+                    color:function(params) {// 柱状图颜色
+                        // build a color map as your need.
+                        var colorList = [	        	                              
+                            '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',	        	                               
+                            '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',	        	                               
+                            '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+                        ];
+                        return colorList[params.dataIndex]
+                    },
+                    label: {
+                        show: true,//柱状图label
+                        position: 'top',//柱状图label位置
+                        textStyle: {
+                            color: 'black',//label颜色
+                            fontWeight:'bolder',//label加粗
+                            fontSize : '12',//label大小
+                            fontFamily : '微软雅黑',
+                        }
+                    }
+                },
+                //柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
+                emphasis: {
+                    barBorderRadius: 30
+                },
+            },
+        },
+        {
+            name:'访问来源',
+            type:'pie',
+            radius: ['50%', '70%'],
+            itemStyle:{
+                borderWidth:5, //圆环设置间隙
+                borderColor:'#fff',//边框颜色要和底色一样
+            },
+            labelLine: {
+                normal: {
+                    length: 20,//饼图引导线的长度
+                    length2: 70,//饼图引导线的长度
+                    lineStyle: {
+                        color: '#333'
+                    }
+                }
+            },
         }
     ]
 }
 
 
-// 柱状图重贴但不互相叠加 --- https://www.cnblogs.com/sllzhj/p/10711644.html
+this.hwChart.setOption(option_hw);
+this.swChart.setOption(option_sw);
 
+
+this.hwChart = echarts.init(document.getElementById('chartCutTotal'));
+this.swChart = echarts.init(document.getElementById('chartCutTotal'));
+//window.onresize自适应
+setTimeout(function (){
+    window.onresize = function () {
+        this.hwChart.resize();
+        this.swChart.resize();
+    }
+},200)
+
+
+
+// 柱状图重贴但不互相叠加 --- https://www.cnblogs.com/sllzhj/p/10711644.html
+// 饼图线的设置 --- https://www.jianshu.com/p/b1330b60ca97
 
 
