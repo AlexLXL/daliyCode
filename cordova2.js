@@ -28,15 +28,16 @@
  * cordova run android //运行在手机(手机USB连到电脑)
  *
  *
- *通过yarn build 打包vue项目，把打包好的文件拉到cordova项目的www文件夹
- main.js加上这个
- document.addEventListener('deviceready',function () {
-    new Vue({
-        render: h => h(App),
-    }).$mount('#app')
-})
+ *  通过yarn build 打包vue项目，把打包好的文件拉到cordova项目的www文件夹
  * vue+cordova遇到的问题:
- *		1.index.html内容显示，组件不显示--->原因:打包后html引用js是/开头(正确路径应该是js/index.js 不是/js/index.js)
+ * 
+ *      1.main.js加上这个
+ *          document.addEventListener('deviceready',function () {
+ *             new Vue({
+ *                 render: h => h(App),
+ *             }).$mount('#app')
+ *          )
+ *		2.index.html内容显示，组件不显示--->原因:打包后html引用js是/开头(正确路径应该是js/index.js 不是/js/index.js)
  *			解决方法: a.打完包手动删除/
  *					  b.配置vue-cli的webpack配置-脚手架3更目录添加vue.config.js的配置(脚手架2网上很多)
  *								module.exports = {
@@ -52,7 +53,8 @@
  *   								}
  *								}
  *
- *
+ *      3.照相机配置-Camera.DestinationType.DATA_URL的Camera报错
+ *          解决方法:取消eslint(新建脚手架的时候不选择)或package.json里面删除eslint的依赖包，然后重新下包 / 网上的配置
  *
  *
  *
