@@ -796,6 +796,9 @@ var option = {
                 color: '#999'
             }
         },
+        position: function (point, params, dom, rect, size) {//point是鼠标的位置
+            return [point[0]+10, point[1] - 80];
+        }
         formatter : function(params, ticket, callback) {
             if (params.value == undefined || params.value !== params.value) {
                 params.value = 0;
