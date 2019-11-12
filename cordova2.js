@@ -31,7 +31,7 @@
  *  通过yarn build 打包vue项目，把打包好的文件拉到cordova项目的www文件夹
  * vue+cordova遇到的问题:
  * 
- *      1.main.js加上这个
+ *      1.main.js加上这个 // 会导致在web端看不到组件的内容-可以删了或者在app里面设置
  *          document.addEventListener('deviceready',function () {
  *             new Vue({
  *                 render: h => h(App),
