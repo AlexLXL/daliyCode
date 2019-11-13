@@ -127,7 +127,7 @@ remoteMethod(query) {
 大屏的按高等比缩放(原型1920*1080)(不会压缩文字，但会屏幕宽度太小，高度太大，会看不到两边)
 <script>
       var bodyNode = document.getElementsByTagName('body')[0];
-      var ratioH = window.innerHeight / 768;
+      var ratioH = window.innerHeight / 1080;
       bodyNode.style.transform = "scale(" + ratioH + ")";
       bodyNode.style.transformOrigin = "left top";
       bodyNode.style.marginLeft = (window.innerWidth - bodyNode.clientWidth * ratioH) / 2 + "px";

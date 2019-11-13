@@ -745,7 +745,7 @@ var option = {
             },
             formatter: function(params,index){  //方案III 间隔一个换行
                 if (index % 2 != 0) {
-                    return '\n\n' + params;
+                    return '\n' + params;
                 }
                 else {
                     return params;
@@ -944,6 +944,49 @@ setTimeout(function (){
     }
 },200)
 
+
+
+//数据格式(年份会增长)
+proWater: {
+    name: '平均日产水量',
+    myDate: ['前山', '拱北', '白藤', '新青', '三灶', '平沙', '南水', '富山', '南区'],
+    legendList:['2018年','2019年'],
+    colorList:['#4ebce5','#68cc80'],
+    data:{
+        "2018": [8.3,5.7,3.7,2.4,5.3,3.9,3.8,2.0,0.0],
+        "2019": [8.8,5.6,4.4,2.4,6.8,4.8,4.6,2.6,2.9],
+    }
+}
+
+//立即可执行函数动态生成series
+series: (function () {
+    let newArr = [];
+    let num = -1;
+    for (var i in self.chart2.proWater.data){
+        num++;
+        newArr.push(
+            {
+                name:i + '年',
+                type:'bar',
+                label: {
+                    normal: {
+                        rotate:90,
+                        show: true,
+                        position: 'top',
+                    }
+                },
+                itemStyle: { // 柱条样式。
+                    normal: {
+                        barBorderRadius:[5, 5,0, 0],
+                        color: self.chart2.proWater.colorList[num], // 普通状态下柱条颜色
+                    },
+                },
+                data:self.chart2.proWater.data[i]
+            },
+        );
+    }
+    return newArr
+})()
 
 
 // 柱状图重贴但不互相叠加 --- https://www.cnblogs.com/sllzhj/p/10711644.html
