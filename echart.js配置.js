@@ -929,6 +929,47 @@ var option = {
     ]
 }
 
+// 两个x轴，设置第一个在上方-不显示-但显示图表所有的点
+//             第二个是相对第一个的另一方-显示-显示部分x轴label
+// 折线图显示所有的点，但只显示部分的x轴坐标
+xAxis: [
+    {
+        show: false,
+        type: 'category',
+        axisTick: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#ccc',
+            }
+        },
+        axisLabel: {
+            rotate:45,
+            interval: 0,  //设置这里
+            margin: 10,
+        },
+        position:'top',
+        data: self.chart1.cutTotal.myDate
+    },
+    {
+        type: 'category',
+        axisTick: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#ccc',
+            }
+        },
+        axisLabel: {
+            rotate:45,
+            // interval: 0,  //设置这里
+            margin: 10,
+        },
+        data: self.chart1.cutTotal.myDate
+    }
+],
 
 this.hwChart.setOption(option_hw);
 this.swChart.setOption(option_sw);
