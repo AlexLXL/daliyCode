@@ -1,0 +1,2 @@
+var myEvent = new Event('resize');  //²»Ö§³Öie
+window.dispatchEvent(myEvent);

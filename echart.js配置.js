@@ -992,7 +992,7 @@ this.hwChart = echarts.init(document.getElementById('chartCutTotal'));
 this.swChart = echarts.init(document.getElementById('chartCutTotal'));
 //window.onresize自适应
 setTimeout(function (){
-    window.onresize = function () {
+    window.onresize = function () {     //on绑定事件会覆盖（单一的）、addEventListener可以同时绑定同个
         this.hwChart.resize();
         this.swChart.resize();
     }
@@ -1042,6 +1042,12 @@ series: (function () {
     return newArr
 })()
 
+
+//触发resize事件（不支持ie）
+setInterval(()=>{
+    var myEvent = new Event('resize');  //不支持ie
+    window.dispatchEvent(myEvent);
+},1000)
 
 // 柱状图重贴但不互相叠加 --- https://www.cnblogs.com/sllzhj/p/10711644.html
 // 饼图线的设置 --- https://www.jianshu.com/p/b1330b60ca97
