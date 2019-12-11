@@ -83,8 +83,8 @@ string.trim()去掉前后空格
                 </el-table-column>
 
 self.appUserInfo.info.factory.id;
-this.department1 = this.appUserInfo.info.factoryUserDefault.department1// 部门
-this.loginName = this.appUserInfo.info.loginUser.name;// 用户名(和登录名不同)
+self.appUserInfo.info.factoryUserDefault.department1// 部门(总共有四个)
+this.appUserInfo.info.loginUser.name;// 用户名(和登录名不同)
 
 @keyup.enter.native="search"
 
