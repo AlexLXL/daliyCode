@@ -14,6 +14,9 @@ if(isNaN(this.lastMonthStockValue)){
                 this.lastMonthStock = this.lastMonthStockValue;
                 this.innerVisible = false;
             }
+
+判断数组
+arr instanceof Array
 --------------------
 // 定时更新日期和气温
         setInterval(() => {
@@ -25,6 +28,18 @@ if(isNaN(this.lastMonthStockValue)){
         }, +new Date(Date.now() + 24*60*60*1000) - Date.now())
 ---------------------
 Object.keys(b).length    判断是否空对象  https://www.cnblogs.com/jpfss/p/9105119.html
+
+=========================
+.test:after{
+    display: block;
+    content: "*当前设备类型、设备种类、备件类型下，已存在该备件名称";
+    width: 99%;
+    color: red;
+    position: absolute;
+    left: 39%;
+    bottom: -17px
+}
+
 ---------------------
 moment使用
 2019年开始和结束那天
@@ -82,10 +97,29 @@ string.trim()去掉前后空格
                 <el-table-column label="报表状态" fixed width="90" prop="stateText">
                 </el-table-column>
 
+
+=============================================================================================================
+
 self.appUserInfo.info.factory.id;
 self.appUserInfo.info.factoryUserDefault.department1// 部门(总共有四个)
 this.appUserInfo.info.loginUser.name;// 用户名(和登录名不同)
 
+self.getBeforeBatchPromise= new Promise(function(resolve,reject){// 获取当前审批的被借调批次id[已删]
+                resolve()
+            })
+Promise.all([self.getBatchPromise, self.getBeforeBatchPromise]).then(function([ResultJson1,ResultJson2]){
+                
+            });
+
+zoom: 1;
+          &::after{
+            content: "";
+            display: block;
+            clear: both;
+          }
+
+
+=============================================================================================================
 @keyup.enter.native="search"
 
 
@@ -409,3 +443,90 @@ endMonths() {
 mounted:{
 	this.changeMonthReport()
 }
+
+
+
+
+==================================
+验证
+submitProjectsCheck(type){
+            let io = true;
+            try {
+                if(this.applyProjects.length == 0){
+                    io = false;
+                    self.$message({
+                        type: 'warning',
+                        message: "请选择需要提交的备件！"
+                    });
+                    return
+                }
+                this.applyProjects.forEach((p) => {
+                    self.dataDict.applyProjects[type].forEach((i) => {
+                        if (!p[i]) {
+                            io = false;
+                            self.$message({
+                                type: 'warning',
+                                message: "请填写全部必填的信息！"
+                            });
+                            throw "请填写全部必填的信息！"// 主动抛错的原因是终止当前forEach
+                        }
+                    });
+                    self.dataDict.applyProjects.mustNum[type].forEach((n) => {
+                        var reg = new RegExp(/^\d+$/);
+                        if (!(reg.test(p[n]) && (p[n] >= 0))) {
+                            io = false;
+                            let hint = self.dataDict.applyProjects.mustNumDict[n] + "请输入 大于等于0 的数字";
+                            self.$message({
+                                type: 'warning',
+                                message: hint
+                            });
+                            throw hint
+                        }
+                    })
+                });
+            }catch(err){
+
+            }
+            return io;
+        },
+======================================================
+内外网不同地址
+parameter: {
+        projectId: projectId,webNetWorkName:window.location.href.indexOf('222') > -1?'':'内网222'
+      }
+    };
+
+====================================================
+有必要统计一下moment的所有写法
+下拉框年份
+var nowYear = new Date().getFullYear();
+        this.years = [];
+        if (nowYear <= 2018) {
+            this.years = [2018];
+            return;
+        }
+        for (let i = 2018; i <= nowYear; i++) {
+            this.years.push(i)
+        }
+
+
+当前月：this.monthSelected = +moment().format('M');
+==================================================
+返回一个promise，然后那边函数使用.then（（result）=》｛｝）接收
+ // 获取批次
+        getBatch(repPartId, isOther){ // 备件id
+            self.loading = true;
+            self.loadingNum++;
+            let param={
+                id: repPartId,
+                factoryId: self.currentUserFactoryId,
+                isOther: 0,
+            };
+            var batchPromise = new Promise(function(resolve,reject){
+                appSpareApplyBacklogController.getBatchByRepPartId(param, (result) => {
+                    resolve(result)
+                    self.closeLoading();
+                })
+            })
+            return batchPromise
+        },
