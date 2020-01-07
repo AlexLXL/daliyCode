@@ -1,0 +1,1 @@
+C:\Program Files (x86)\python\Scripts\;C:\Program Files (x86)\python\;C:\Users\Administrator\AppData\Roaming\npm;%ANDROID_SDK_HOME%\platform-tools;%ANDROID_SDK_HOME%\tools;C:\Users\Administrator\AppData\Local\Programs\Microsoft VS Code\bin;%GRADLE_HOME%\bin

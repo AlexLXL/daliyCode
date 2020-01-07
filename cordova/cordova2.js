@@ -19,7 +19,7 @@
  * 				(cordova platform update android)
  * 				(android ios --save)(--save表示更新config.xml配置文件)
  * cordova requirements //检查是否满足构建平台的要求
- * cordova build (打包的时候注意安卓的版本，现在手机的是7.1.2，所以我添加平台装了个7.1.1 cordova platform add android@7.1.1 --save)
+ * cordova build (打包的时候注意安卓的版本，现在手机的是7.1.2，所以我添加平台装了个7.1.1 cordova platform add android@7.1.1 --save)  项目用6.2.3
  * cordova build android //打包-打包失败(Requirements check failed for JSK 1.8)可能是cordova新版本导致(建议使用低版本)
  * 					  	//打包时使用的内存大小设置: android/sdk/build-tools/android-4.3/dx.bat --> set defaultXmx=-Xmx1024M
  *            			//实际是把文件放在了：项目/platform/android/app/src/main/www(里面有cordova.js)
@@ -112,3 +112,8 @@
  
  * 
  */
+
+ // 安装Android Studio还要
+ // 解压android-sdk_r24.4.1-windows,配置环境变量
+ // 打开Android Studio选择android-sdk_r24.4.1-windows的地址
+ // android-sdk-windows下载相应的版本
