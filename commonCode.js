@@ -222,6 +222,8 @@
             // alert(a instanceof test) -- true
         // 单独判断null
             // !temp && typeof(temp)!="undefined" && temp!=0
+        // 单独判断NaN
+            // Number.isNaN(NaN)
 
         // 判断是否空对象 - Object.keys(b).length
         
@@ -278,6 +280,53 @@
             })
             return batchPromise
         },
+    }
+    // 下载文档流
+    {
+        // request () {
+        //     // 处理请求参数
+        //     self.tableData.forEach((item) => {
+        //         
+        //     });
+        //     let param = {
+        //         token:serviceHelper.getToken(),
+        //     };
+
+        //     const req = new XMLHttpRequest();
+        //     // 请求路径（改成自己的）
+        //     req.open('POST', serviceHelper.getBasicPath() + '/repPartApply/downloadRepPartApplyById', true);
+        //     // 设置返回的数据类型是blob（将文档流转化为blob）
+        //     req.responseType = 'blob';
+        //     // 设置请求传参的方式，因为我的项目只能FormData验证token，所以只能这样（改成自己的）
+        //     req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        //     req.onload = function() {
+        //         const data = req.response;
+        //         // 创建Blob，注意传的是数组
+        //         const blob = new Blob([data]);
+        //         // 将当前文件映射到这个url
+        //         const blobUrl = window.URL.createObjectURL(blob);
+        //         // 创建a标签并下载
+        //         self.download(blobUrl) ;
+        //     };
+        //     // 拼凑出合法的formData参数：格式xxx/yyy?name=123&age=18（使用var a = new FormData();a.append(key,value)不符合我的项目的传参格式）
+        //     let formData = '';
+        //     for (let key in param) {
+        //         if(typeof  key == 'object') formData += '&' + key + '=' + JSON.stringify(param[key])
+        //         else formData += '&' + key + '=' + param[key]
+        //     }
+        //     req.send(formData.slice(1));
+        // },
+        // // 创建a标签下载
+        // download(blobUrl) {
+        //     // 创建a标签
+        //     const a = document.createElement('a');
+        //     // 文件名称（如果是动态的，可以用响应头里面的数据）
+        //     a.download = '领料单.docx';
+        //     // 设置a标签的href
+        //     a.href = blobUrl;
+        //     // 模拟点击
+        //     a.click();
+        // }
     }
     // 大屏缩放
         {
@@ -362,14 +411,30 @@
     {
         delete a.age;
     }
+    // 请求缓存问题
+    {
+        // 1、在 URL 参数后加上 "?timestamp=" + new Date().getTime(); 
+        // 2、URL 参数后加上 "?ran=" + Math.random(); //当然这里参数 ran可以任意取了 
+        // 3、配置请求信息:https://www.cnblogs.com/yunshangwuyou/p/9581018.html
+    }
     // jsonp解决跨域参考arcgis里的图层名
     // 获取本地json文件也是参考arcgis的图层名 // https://www.cnblogs.com/changcendoudou/p/7670963.html
+
+    
 
 // moment.js
     // 获取第一天/最后一天
     {
+        moment().format("YYYY-MM-DD HH:mm:ss"); //当前时间
         moment("2020-1").startOf('year/month').format("YYYY-MM-DD")//日期可以是 年月的格式 也可以是年月日的格式
         moment("2020-1").endOf('year/month').format("YYYY-MM-DD")//日期可以是 年月的格式 也可以是年月日的格式
+    }
+    // 获取之前的时间
+    {
+        moment().subtract(1, "years").format("YYYY-MM-DD"); //当前时间的前1年时间
+        moment().subtract(3, "months").format("YYYY-MM-DD"); //当前时间的前3个月时间
+        moment().subtract(1, "weeks").format("YYYY-MM-DD"); //当前时间的前一个星期时间
+        moment().subtract(10, "days").format("YYYY-MM-DD"); //当前时间的前10天时间
     }
 
     // 初始化数据
